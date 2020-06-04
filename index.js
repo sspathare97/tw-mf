@@ -29,7 +29,7 @@ const getFriends = async (user) => {
     // store required data in friends object
     response.users.forEach(u => friends[u.screen_name] = {name: u.name, image: u.profile_image_url_https});
     // cursoring
-    params.cursor = response.next_cursor;
+    params.cursor = response.next_cursor_str;
   } 
   while (params.cursor != 0);
   return friends;
@@ -68,12 +68,17 @@ app.get('/api', async function (req, res) {
   const {user1, user2} = req.query;
   // log usernames to console
   console.log({user1, user2});
+  // username regex
+  const userRegex = /^[A-Za-z0-9_]{1,15}$/;
   // server side validation
   if (!user1 || !user2) {
     res.send({result: false, error: "Please enter both usernames!"});
   } 
   else if (user1 == user2) {
     res.send({result: false, error: "Both usernames can't be the same!"});
+  }
+  else if (!userRegex.test(user1) || !userRegex.test(user2)) {
+    res.send({result: false, error: "Invalid username format!"});
   }
   else {
     try {

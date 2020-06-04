@@ -73,12 +73,17 @@ const validate = async () => {
   const user1 = ipUser1.value;
   const user2 = ipUser2.value;
   document.activeElement.blur();
+  // username regex
+  const userRegex = /^[A-Za-z0-9_]{1,15}$/;
   // client side validation
   if (!user1 || !user2) {
     alert("Please enter both usernames!");
   } 
   else if (user1 == user2) {
     alert("Both usernames can't be the same!");
+  }
+  else if (!userRegex.test(user1) || !userRegex.test(user2)) {
+    alert("Invalid username format!");
   }
   else {
     showLoadingBtn(btn);
